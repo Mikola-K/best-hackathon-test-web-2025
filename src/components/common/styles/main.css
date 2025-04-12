@@ -1,0 +1,10 @@
+@import "./font.css";
+@import "./color.css";
+
+* {
+  color: #161616;
+  font-family: Outfit !important;
+}
+.font-poppinss {
+  font-family: Poppins !important;
+}

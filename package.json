@@ -1,0 +1,40 @@
+{
+  "name": "best-hackathon-test-web-2025",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.0.2",
+    "@mui/lab": "7.0.0-beta.11",
+    "@mui/material": "^7.0.2",
+    "@mui/styled-engine-sc": "^7.0.2",
+    "@mui/x-date-pickers": "^7.28.3",
+    "@reduxjs/toolkit": "^2.6.1",
+    "axios": "^1.8.4",
+    "next": "15.3.0",
+    "prettier": "^3.5.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.55.0",
+    "react-redux": "^9.2.0",
+    "react-responsive": "^10.0.1",
+    "redux-persist": "^6.0.0",
+    "styled-components": "^6.1.17",
+    "swiper": "^11.2.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
