@@ -11,7 +11,6 @@ import { useMediaQueries } from "../../utils/hooks/useMediaQueries";
 import Image from "next/image";
 import volunteerIcon from "../../assets/images/volunteerIcon.png";
 import { authSignIn } from "../../config/apiMethods";
-import { authSignIn } from "../../config/apiMethods";
 import { setAccessToken } from "../../store/features/authSlice";
 import { setUserData, setUserRole } from "../../store/features/userSlise";
 
@@ -27,27 +26,14 @@ const LogInPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = (data: any) => {
-    // authSignIn(data.email, data.password)
-    //   .then((response) => {
-    //     console.log("Login successful:", response);
-    //     // Handle successful login (e.g., redirect to dashboard)
-    //   })
-    //   .catch((error) => {
-    //     console.error("Login failed:", error);
-    //     // Handle login failure (e.g., show error message)
-    //   });
-
-    const response = authSignIn(data.email, data.password);
-    console.log("reponse", response);
-    // @ts-ignore
-    dispatch(setAccessToken(response?.token));
-    // @ts-ignore
-    dispatch(setUserData(response?.data));
-    dispatch(setUserRole("role"));
     authSignIn(data.email, data.password)
       .then((response) => {
         console.log("Login successful:", response);
-        dispatch(setAccessToken(response.data.accessToken));
+        // @ts-ignore
+        dispatch(setAccessToken(response?.data.accessToken));
+        // @ts-ignore
+        dispatch(setUserData(response?.data));
+        dispatch(setUserRole("role"));
         window.location.href = "/";
       })
       .catch((error) => {
