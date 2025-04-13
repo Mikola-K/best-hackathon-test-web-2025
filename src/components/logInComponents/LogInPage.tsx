@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Box, Typography, Divider } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import {
@@ -23,7 +23,7 @@ const LogInPage: React.FC = () => {
     handleSubmit,
     control,
     formState: { errors },
-    getValues,
+    // Removed unused getValues
   } = useForm();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -33,7 +33,7 @@ const LogInPage: React.FC = () => {
         console.log("Login successful:", response);
         dispatch(setAccessToken(response?.data.accessToken));
         dispatch(setUserData(response?.data));
-        dispatch(setUserRole(response?.data?.role));
+        dispatch(setUserRole(response?.data?.roles?.[0]));
         router.push("/");
       })
       .catch((error) => {
@@ -92,21 +92,21 @@ const LogInPage: React.FC = () => {
                 control={control}
                 rules={{
                   required: "Email обов'язковий",
-                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                    message: "Неправильний формат email",
+                  },
                 }}
                 render={({ field }) => (
                   <CustomInputs
                     {...field}
-                    placeholder="e-mail"
+                    placeholder="Email"
                     variant="outlined"
                     size="small"
+                    type="email"
                     error={!!errors.email}
                     helperText={
-                      errorMessage || errors.email
-                        ? typeof errors.email.message === "string"
-                          ? errors.email.message
-                          : " "
-                        : " "
+                      errorMessage || (errors.email?.message as string) || " "
                     }
                   />
                 )}
@@ -140,7 +140,7 @@ const LogInPage: React.FC = () => {
               />
             </Box>
             <CustomButton variant="contained" sx={{ mt: 2 }} type="submit">
-              Війти
+              Увійти
             </CustomButton>
           </form>
         </Box>

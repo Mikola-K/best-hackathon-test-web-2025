@@ -7,6 +7,9 @@ import {
   CustomCheckbox,
 } from "../common/styles/customStyledComponents/customStyledComponents";
 import { useMediaQueries } from "../../utils/hooks/useMediaQueries";
+import { useState } from "react";
+import { authRegister } from "@/config/apiMethods";
+import { DateRange } from "@mui/icons-material";
 
 type FormProps = {
   formType: "volunteer" | "shelter";
@@ -29,22 +32,62 @@ const RegisterForm = ({
     getValues,
   } = useForm();
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const onSubmit = (data: any) => {
+    authRegister(data)
+      .then((response) => {
+        console.log("Registration successful:", response);
+        window.location.href = "/login";
+      })
+      .catch((error) => {
+        console.log("Registration failed:", error);
+        console.log(error?.response);
+
+        if (error?.response?.data) {
+          console.log("processing errors");
+          const formattedErrors = Object.entries(error.response.data.errors)
+            .map(([field, messages]) => `${(messages as string[]).join(" \n")}`)
+            .join("\n");
+          console.log(formattedErrors);
+          setErrorMessage(formattedErrors);
+        } else {
+          setErrorMessage(
+            "Помилка при реєстрації. Можливо Ваш email вже використовується або пароль занадто простий."
+          );
+        }
+      });
+
     console.log(data);
   };
 
   return (
     <Box className="main-bg-color flex flex-col items-center justify-center md:p-10 h-screen">
       <Box className="main-white-bg-color w-full md:max-w-[1040px] rounded-[20px] flex flex-col md:flex-row justify-center items-center">
-        <Box sx={{ maxHeight: 1024, overflow: "hidden", width: "100%" }}>
+        <Box
+          sx={{
+            maxHeight: 1024,
+            overflow: "hidden",
+            width: "100%",
+            position: "relative",
+          }}
+        >
           <Image
+            className="register-image"
             src={image}
             alt={formType === "volunteer" ? "Volunteer" : "Shelter"}
             layout="responsive"
             objectFit="cover"
             style={{
+              transition: "transform 0.3s ease",
               borderTopLeftRadius: isMdScreen ? 20 : 0,
               borderBottomLeftRadius: isMdScreen ? 20 : 0,
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.transform = "scale(1.01)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.transform = "scale(1)";
             }}
           />
         </Box>
@@ -61,21 +104,31 @@ const RegisterForm = ({
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col md:justify-evenly w-full h-full md:space-y-4 mt-4"
           >
+            {errorMessage && (
+              <Typography
+                variant="body1"
+                color="error"
+                className="mb-3 text-center"
+                style={{ whiteSpace: "pre-line" }}
+              >
+                {errorMessage}
+              </Typography>
+            )}
             <Box sx={{ mb: 0 }}>
               <Typography variant="h6" className="mb-2" fontWeight={600}>
-                e-mail
+                Email
               </Typography>
               <Controller
                 name="email"
                 control={control}
                 rules={{
-                  required: "e-mail обов'язковий",
+                  required: "Email обов'язковий",
                   pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
                 }}
                 render={({ field }) => (
                   <CustomInputs
                     {...field}
-                    placeholder="e-mail"
+                    placeholder="email@gmail.com"
                     variant="outlined"
                     size="small"
                     error={!!errors.email}
@@ -92,17 +145,38 @@ const RegisterForm = ({
             </Box>
             {formType === "shelter" && (
               <Box sx={{ mb: 0 }}>
-                <Typography variant="h6" className="mb-2" fontWeight={600}>
-                  Назва притулку
+                <Typography variant="h6" className="" fontWeight={600}>
+                  Назва та адреса притулку
                 </Typography>
                 <Controller
                   name="shelterName"
                   control={control}
-                  rules={{ required: "Назва притулку обов'язкова" }}
+                  rules={{ required: "Поле обов'язкове" }}
                   render={({ field }) => (
                     <CustomInputs
                       {...field}
-                      placeholder="Назва притулку"
+                      placeholder="Песики і Патрони"
+                      variant="outlined"
+                      size="small"
+                      error={!!errors.shelterName}
+                      helperText={
+                        errors.shelterName
+                          ? typeof errors.shelterName.message === "string"
+                            ? errors.shelterName.message
+                            : " "
+                          : " "
+                      }
+                    />
+                  )}
+                />
+                <Controller
+                  name="shelterAddress"
+                  control={control}
+                  rules={{ required: "Адреса притулку обов'язкова" }}
+                  render={({ field }) => (
+                    <CustomInputs
+                      {...field}
+                      placeholder="вул. Кульпарківська 17, м. Львів"
                       variant="outlined"
                       size="small"
                       error={!!errors.shelterName}
@@ -119,91 +193,61 @@ const RegisterForm = ({
               </Box>
             )}
             {formType === "volunteer" && (
-              <>
-                <Box sx={{ mb: 0 }}>
-                  <Typography variant="h6" className="mb-2" fontWeight={600}>
-                    Ім’я
-                  </Typography>
-                  <Controller
-                    name="firstName"
-                    control={control}
-                    rules={{ required: "Ім'я обов'язкове" }}
-                    render={({ field }) => (
-                      <CustomInputs
-                        {...field}
-                        placeholder="Ім’я"
-                        variant="outlined"
-                        size="small"
-                        error={!!errors.firstName}
-                        helperText={
-                          errors.firstName
-                            ? typeof errors.firstName.message === "string"
-                              ? errors.firstName.message
-                              : " "
+              <Box sx={{ mb: 0 }}>
+                <Typography variant="h6" className="" fontWeight={600}>
+                  Ім'я та прізвище
+                </Typography>
+                <Controller
+                  name="name"
+                  control={control}
+                  rules={{ required: "Поле обов'язкове" }}
+                  render={({ field }) => (
+                    <CustomInputs
+                      {...field}
+                      placeholder="Іван Петрович"
+                      variant="outlined"
+                      size="small"
+                      error={!!errors.shelterName}
+                      helperText={
+                        errors.shelterName
+                          ? typeof errors.shelterName.message === "string"
+                            ? errors.shelterName.message
                             : " "
-                        }
-                      />
-                    )}
-                  />
-                </Box>
-                <Box sx={{ mb: 0 }}>
-                  <Typography variant="h6" className="mb-2" fontWeight={600}>
-                    Прізвище
-                  </Typography>
-                  <Controller
-                    name="lastName"
-                    control={control}
-                    rules={{ required: "Прізвище обов'язкове" }}
-                    render={({ field }) => (
-                      <CustomInputs
-                        {...field}
-                        placeholder="Прізвище"
-                        variant="outlined"
-                        size="small"
-                        error={!!errors.lastName}
-                        helperText={
-                          errors.lastName
-                            ? typeof errors.lastName.message === "string"
-                              ? errors.lastName.message
-                              : " "
+                          : " "
+                      }
+                    />
+                  )}
+                />
+              </Box>
+            )}
+            {formType === "volunteer" && (
+              <Box sx={{ mb: 0 }}>
+                <Typography variant="h6" className="mb-2" fontWeight={600}>
+                  Дата народження
+                </Typography>
+                <Controller
+                  name="birthday"
+                  control={control}
+                  rules={{ required: "Дата народження обов'язкова" }}
+                  render={({ field }) => (
+                    <CustomInputs
+                      {...field}
+                      type="date"
+                      variant="outlined"
+                      size="small"
+                      error={!!errors.birthday}
+                      helperText={
+                        errors.birthday
+                          ? typeof errors.birthday.message === "string"
+                            ? errors.birthday.message
                             : " "
-                        }
-                      />
-                    )}
-                  />
-                </Box>
-                <Box sx={{ mb: 0 }}>
-                  <Typography variant="h6" className="mb-2" fontWeight={600}>
-                    Дата народження
-                  </Typography>
-                  <Box className="flex space-x-2">
-                    <Box sx={{ mb: 0 }}>
-                      <CustomInputs
-                        placeholder="ДД"
-                        variant="outlined"
-                        size="small"
-                        style={{ width: "40%" }}
-                      />
-                    </Box>
-                    <Box>
-                      <CustomInputs
-                        placeholder="ММ"
-                        variant="outlined"
-                        size="small"
-                        style={{ width: "40%" }}
-                      />
-                    </Box>
-                    <Box>
-                      <CustomInputs
-                        placeholder="РРРР"
-                        variant="outlined"
-                        size="small"
-                        style={{ width: "80%" }}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              </>
+                          : " "
+                      }
+                      onChange={(e) => field.onChange(e.target.value)}
+                    />
+                  )}
+                />
+              </Box>
             )}
             <Box sx={{ mb: 0 }}>
               <Typography variant="h6" className="mb-2" fontWeight={600}>
@@ -213,23 +257,36 @@ const RegisterForm = ({
                 name="password"
                 control={control}
                 rules={{ required: "Пароль обов'язковий" }}
-                render={({ field }) => (
-                  <CustomInputs
-                    {...field}
-                    placeholder="Пароль"
-                    variant="outlined"
-                    size="small"
-                    type="password"
-                    error={!!errors.password}
-                    helperText={
-                      errors.password
-                        ? typeof errors.password.message === "string"
-                          ? errors.password.message
+                render={({ field }) => {
+                  const [showPassword, setShowPassword] = useState(false);
+                  return (
+                    <CustomInputs
+                      {...field}
+                      placeholder="8+ символів, 1+ велика літера та 1+ спецсимвол"
+                      variant="outlined"
+                      size="small"
+                      type={showPassword ? "text" : "password"}
+                      error={!!errors.password}
+                      helperText={
+                        errors.password
+                          ? typeof errors.password.message === "string"
+                            ? errors.password.message
+                            : " "
                           : " "
-                        : " "
-                    }
-                  />
-                )}
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <Box
+                            onClick={() => setShowPassword(!showPassword)}
+                            sx={{ cursor: "pointer" }}
+                          >
+                            {showPassword ? "❌" : "👁️"}
+                          </Box>
+                        ),
+                      }}
+                    />
+                  );
+                }}
               />
             </Box>
             <Box sx={{ mb: 0 }}>
@@ -244,60 +301,142 @@ const RegisterForm = ({
                   validate: (value) =>
                     value === getValues("password") || "Паролі не співпадають",
                 }}
-                render={({ field }) => (
-                  <CustomInputs
-                    {...field}
-                    placeholder="Підтвердження паролю"
-                    variant="outlined"
-                    size="small"
-                    type="password"
-                    error={!!errors.confirmPassword}
-                    helperText={
-                      errors.confirmPassword
-                        ? typeof errors.confirmPassword.message === "string"
-                          ? errors.confirmPassword.message
+                render={({ field }) => {
+                  const [showConfirmPassword, setShowConfirmPassword] =
+                    useState(false);
+                  return (
+                    <CustomInputs
+                      {...field}
+                      placeholder="Повторіть пароль"
+                      variant="outlined"
+                      size="small"
+                      type={showConfirmPassword ? "text" : "password"}
+                      error={!!errors.confirmPassword}
+                      helperText={
+                        errors.confirmPassword
+                          ? typeof errors.confirmPassword.message === "string"
+                            ? errors.confirmPassword.message
+                            : " "
                           : " "
-                        : " "
-                    }
-                  />
-                )}
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <Box
+                            onClick={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
+                            sx={{ cursor: "pointer" }}
+                          >
+                            {showConfirmPassword ? "❌" : "👁️"}
+                          </Box>
+                        ),
+                      }}
+                    />
+                  );
+                }}
               />
             </Box>
+
             {formType === "shelter" && (
               <Box sx={{ mb: 0 }}>
                 <Typography variant="h6" className="mb-2" fontWeight={600}>
                   Категорія
                 </Typography>
-                <CustomInputs
-                  placeholder="Категорія"
-                  variant="outlined"
-                  size="small"
-                  select
-                  SelectProps={{
-                    native: true,
-                  }}
-                >
-                  <option value="volunteer">Ветклініка</option>
-                  <option value="shelter">Притулок для тварин</option>
-                  <option value="shelter">Розплідник</option>
-                  <option value="shelter">Інше</option>
-                </CustomInputs>
+                <Controller
+                  name="shelterType"
+                  control={control}
+                  rules={{ required: "Категорія обов'язкова" }}
+                  render={({ field }) => (
+                    <CustomInputs
+                      {...field}
+                      placeholder="Категорія"
+                      variant="outlined"
+                      size="small"
+                      select
+                      SelectProps={{
+                        native: true,
+                      }}
+                      error={!!errors.shelterType}
+                      helperText={
+                        errors.shelterType
+                          ? typeof errors.shelterType.message === "string"
+                            ? errors.shelterType.message
+                            : " "
+                          : " "
+                      }
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    >
+                      <option value="">Оберіть категорію</option>
+                      <option value={0}>Ветклініка</option>
+                      <option value={1}>Притулок для тварин</option>
+                      <option value={2}>Розплідник</option>
+                      <option value={3}>Інше</option>
+                    </CustomInputs>
+                  )}
+                />
               </Box>
             )}
             <Box sx={{ mb: 0, mt: 2 }} className="flex flex-col ml-4">
-              <FormControlLabel
-                control={<CustomCheckbox sx={{ mr: 1 }} />}
-                label="Згода за Правилами реєстрації"
+              <Controller
+                name="agreeToTerms"
+                control={control}
+                rules={{
+                  validate: (value) =>
+                    value ||
+                    "Ви маєте погоджуватись з цим пунктом для завершення реєстрації",
+                }}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={
+                      <CustomCheckbox
+                        {...field}
+                        checked={field.value || false}
+                        sx={{ mr: 1 }}
+                      />
+                    }
+                    label="Згода з Правилами реєстрації"
+                  />
+                )}
               />
-              <FormControlLabel
-                control={<CustomCheckbox sx={{ mr: 1 }} />}
-                label="Згода на обробку персональних даних"
-                sx={{ mt: 2 }}
+              {errors.agreeToTerms && (
+                <Typography variant="body2" color="error" className="ml-8 mt-1">
+                  {/* @ts-ignore */}
+                  {errors.agreeToTerms.message}
+                </Typography>
+              )}
+              <Controller
+                name="agreeToDataProcessing"
+                control={control}
+                rules={{
+                  validate: (value) =>
+                    value ||
+                    "Ви маєте погоджуватись з цим пунктом для завершення реєстрації",
+                }}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={
+                      <CustomCheckbox
+                        {...field}
+                        checked={field.value || false}
+                        sx={{ mr: 1 }}
+                      />
+                    }
+                    label="Згода на обробку персональних даних"
+                    sx={{ mt: 2 }}
+                  />
+                )}
               />
+              {errors.agreeToDataProcessing && (
+                <Typography variant="body2" color="error" className="ml-8 mt-1">
+                  {/* @ts-ignore */}
+                  {errors.agreeToDataProcessing.message}
+                </Typography>
+              )}
             </Box>
             <CustomButton variant="contained" sx={{ mt: 4 }} type="submit">
               Зареєструватися
             </CustomButton>
+            {/* <small>Lapka (c) 2025</small> */}
           </form>
         </Box>
       </Box>

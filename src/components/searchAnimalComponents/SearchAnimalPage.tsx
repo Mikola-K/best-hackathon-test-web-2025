@@ -19,7 +19,8 @@ import {
 import { useMediaQueries } from "../../utils/hooks/useMediaQueries";
 import FilterComponent from "./FilterComponent";
 import cardImage from "../../assets/images/cardImage.png";
-
+import { getAllAnimals } from "../../config/apiMethods";
+import Cookies from "js-cookie";
 const AnimalPage = () => {
   const router = useRouter();
   const { isMdScreen } = useMediaQueries();
@@ -45,7 +46,8 @@ const AnimalPage = () => {
       id: 3,
       name: "Шерлок",
       age: 2,
-      description: "Розумний та активний собака Розумний та активний собака, готовий до нових пригод",
+      description:
+        "Розумний та активний собака Розумний та активний собака, готовий до нових пригод",
       image: cardImage,
       city: "Львів",
     },
@@ -105,6 +107,15 @@ const AnimalPage = () => {
 
     setFilteredAnimals(filtered);
   };
+
+  const fetchAllAnimals = async () => {
+    const data = await getAllAnimals();
+    setAnimals(data?.items);
+  };
+
+  useEffect(() => {
+    // fetchAllAnimals();
+  }, []);
   return (
     <Box className="main-container py-4 md:pb-10 px-1 md:px-6">
       <Box className="flex flex-col md:flex-row space-y-3 items-center md:justify-center px-4 md:px-0">

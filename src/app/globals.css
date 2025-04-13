@@ -26,3 +26,7 @@ body {
   color: var(--foreground);
   font-family: Outfit, sans-serif;
 } */
+
+.register-image {
+  width: revert-layer!important;
+}
