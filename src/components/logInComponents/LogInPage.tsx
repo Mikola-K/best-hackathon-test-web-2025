@@ -12,6 +12,7 @@ import Image from "next/image";
 import volunteerIcon from "../../assets/images/volunteerIcon.png";
 import { authSignIn } from "../../config/apiMethods";
 import { setAccessToken } from "../../store/features/authSlice";
+import { setUserData, setUserRole } from "../../store/features/userSlise";
 
 const LogInPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,9 @@ const LogInPage: React.FC = () => {
     console.log("reponse", response);
     // @ts-ignore
     dispatch(setAccessToken(response?.token));
+    // @ts-ignore
+    dispatch(setUserData(response?.data));
+    dispatch(setUserRole("role"));
   };
 
   return (

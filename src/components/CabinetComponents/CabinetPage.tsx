@@ -1,8 +1,10 @@
 "use client";
-// import { useRouter } from "next/router";
+// import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Box, Typography } from "@mui/material";
 import ProfileCard from "../../utils/ui/ProfileCard";
+import { selectUserStore } from "../../store/features/userSlise";
 import { AnimalAds } from "../../utils/ui/AnimalAds";
 
 const fetchShelterData = async (id: string) => {
@@ -32,9 +34,10 @@ const fetchShelterData = async (id: string) => {
   return data;
 };
 
-const ShelterPage = () => {
+const CabinetPage = () => {
   // const router = useRouter();
   // const { id } = router.query;
+  const selectUser = useSelector(selectUserStore);
   const id = "2";
   const [shelterData, setShelterData] = useState<any>(null);
   const [animals, setAnimals] = useState<any>([]);
@@ -55,7 +58,7 @@ const ShelterPage = () => {
   return (
     <Box className="main-white-bg-color p-10 flex flex-col md:flex-row">
       <ProfileCard
-        type="shelter"
+        type={selectUser?.userRole || "volunteer"}
         name={shelterData.name}
         email={shelterData.email}
         address={shelterData.address}
@@ -68,7 +71,7 @@ const ShelterPage = () => {
       <div className="mt-4 md:mt-0 mx-auto">
         <AnimalAds
           animals={animals}
-          type="shelter"
+          type={selectUser?.userRole || "volunteer"}
           onEdit={() => {}}
           onDelete={() => {}}
         />
@@ -77,4 +80,4 @@ const ShelterPage = () => {
   );
 };
 
-export default ShelterPage;
+export default CabinetPage;

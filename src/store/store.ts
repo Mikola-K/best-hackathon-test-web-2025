@@ -1,12 +1,22 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import authReducer from './features/authSlice';
+import userReducer from './features/userSlise'
 
 const loadStateFromLocalStorage = () => {
   if (typeof window !== 'undefined') {
     const auth = localStorage.getItem('auth');
+    const user = localStorage.getItem('user');
+    const defaultUserState = {
+      userRole: ''
+    };
+    const userData = user
+      ? { ...defaultUserState, ...JSON.parse(user) }
+      : defaultUserState;
+
     return {
       auth: auth ? JSON.parse(auth) : {},
+      user: userData,
     };
   }
   return {};
@@ -16,6 +26,7 @@ const preloadedState = loadStateFromLocalStorage();
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  user: userReducer,
 });
 
 const localStorageMiddleware = (store) => (next) => (action) => {
@@ -28,6 +39,7 @@ const localStorageMiddleware = (store) => (next) => (action) => {
       console.log('States differ, updating localStorage...');
 
       localStorage.setItem('auth', JSON.stringify(state.auth));
+      localStorage.setItem('user', JSON.stringify(state.user));
     }
   }
 
@@ -39,6 +51,7 @@ const cookiesMiddleware = (store) => (next) => (action) => {
   if (typeof window !== 'undefined') {
     const state = store.getState();
     Cookies.set('auth', JSON.stringify(state.auth), { expires: 7 });
+    Cookies.set('user', JSON.stringify(state.user), { expires: 7 });
   }
   return result;
 };
@@ -91,9 +104,11 @@ export const createStore = (initialPreloadedState = {}) => {
 const loadStateFromCookies = () => {
   if (typeof window !== 'undefined') {
     const auth = Cookies.get('auth');
+    const user = Cookies.get('user');
 
     return {
       auth: auth ? JSON.parse(auth) : {},
+      user: user ? JSON.parse(user) : {},
     };
   }
   return {};

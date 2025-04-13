@@ -3,7 +3,7 @@ import { CustomButton } from "../../components/common/styles/customStyledCompone
 import Image from "next/image";
 
 type ProfileCardProps = {
-  type: "volunteer" | "shelter";
+  type: "volunteer" | "shelter" | string;
   name: string | null;
   email: string;
   address: string;

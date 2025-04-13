@@ -1,3 +1,4 @@
+import SearchAnimalPage from "../components/searchAnimalComponents/SearchAnimalPage";
 export default function Home() {
-  return <div className="flex flex-row justify-center w-full">Test text</div>;
+  return <SearchAnimalPage />;
 }
