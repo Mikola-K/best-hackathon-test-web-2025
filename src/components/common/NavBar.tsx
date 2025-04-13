@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   AppBar,
@@ -16,6 +17,7 @@ import {
 import favicon from "../../assets/icons/favicon.svg";
 
 const NavBar = () => {
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -36,7 +38,8 @@ const NavBar = () => {
           <Image
             src={favicon}
             alt="Logo"
-            style={{ height: "32px", width: "120px" }}
+            style={{ height: "32px", width: "120px", cursor: "pointer" }}
+            onClick={() => router.push("/")}
           />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -57,14 +60,26 @@ const NavBar = () => {
             onClose={handleMenuClose}
             sx={{ mt: 5 }}
           >
-            <MenuItem onClick={handleMenuClose}>Ваш аккаунт</MenuItem>
+            <MenuItem
+              onClick={() => {
+                router.push("/cabinet"), handleMenuClose;
+              }}
+            >
+              Ваш аккаунт
+            </MenuItem>
             <MenuItem onClick={handleMenuClose}>
               Кабінет/Список притулку
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>Уподобані оголошення</MenuItem>
             <MenuItem onClick={handleMenuClose}>Сповіщення</MenuItem>
             <MenuItem onClick={handleMenuClose}>Чат</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Донати</MenuItem>
+            <MenuItem
+              onClick={() => {
+                router.push("/donate"), handleMenuClose;
+              }}
+            >
+              Донати
+            </MenuItem>
             <MenuItem onClick={handleMenuClose}>Звіт</MenuItem>
             <MenuItem onClick={handleMenuClose}>Служба підтримки</MenuItem>
             <MenuItem onClick={handleMenuClose}>Налаштування</MenuItem>

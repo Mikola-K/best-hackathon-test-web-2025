@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Box,
   Typography,
@@ -15,6 +16,7 @@ import {
   CustomInputs,
   CustomRadio,
 } from "../common/styles/customStyledComponents/customStyledComponents";
+import { selectUserStore } from "../../store/features/userSlise";
 
 type FormData = {
   role: string;
@@ -37,7 +39,9 @@ type FormData = {
 };
 
 const AnimalForm = () => {
-  const [role, setRole] = useState("volunteer");
+  const selectUser = useSelector(selectUserStore);
+  const role = selectUser?.userRole || "volunteer";
+
   const {
     handleSubmit,
     control,
@@ -49,15 +53,10 @@ const AnimalForm = () => {
     console.log(data);
   };
 
-  const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRole(event.target.value);
-    setValue("role", event.target.value);
-  };
-
   return (
-    <Box className="flex flex-col items-center justify-center p-10">
+    <Box className="flex flex-col items-center justify-center py-10 md:p-10">
       <Box className="main-white-bg-color w-full max-w-[1040px] rounded-[20px] flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0">
-        <Box className="w-full h-full justify-evenly flex flex-col space-y-4 px-[15px] pt-[24px] pb-[24px] md:px-8 md:pt-6 md:pb-8">
+        <Box className="w-full h-full justify-evenly flex flex-col space-y-4 px-[15px] pb-[24px] md:px-8 md:pt-6 md:pb-8">
           <Typography
             variant="h1"
             className="text-center"
@@ -66,55 +65,60 @@ const AnimalForm = () => {
           >
             {role === "volunteer" ? "Здати тварину" : "Створити оголошення"}
           </Typography>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <Box className="space-y-4 main-bg-color p-10 rounded-[20px]">
-              <Box className="flex flex-row w-full">
-                <Controller
-                  name="name"
-                  control={control}
-                  rules={{ required: "Ім'я тварини обов'язкове" }}
-                  render={({ field }) => (
-                    <CustomInputs
-                      {...field}
-                      label="Кличка"
-                      variant="outlined"
-                      size="small"
-                      error={!!errors.name}
-                      helperText={errors.name ? errors.name.message : ""}
-                    />
-                  )}
-                />
-
-                <Controller
-                  name="age"
-                  control={control}
-                  render={({ field }) => (
-                    <CustomInputs
-                      {...field}
-                      label="Вік"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      placeholder="Роки / Місяці"
-                    />
-                  )}
-                />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-4">
+            <Box className="space-y-4 main-bg-color p-4 md:p-10 rounded-[20px]">
+              <Box className="flex flex-row w-full space-x-3">
+                <Box className="w-full">
+                  <Controller
+                    name="name"
+                    control={control}
+                    rules={{ required: "Ім'я тварини обов'язкове" }}
+                    render={({ field }) => (
+                      <CustomInputs
+                        {...field}
+                        label="Кличка"
+                        variant="outlined"
+                        size="small"
+                        error={!!errors.name}
+                        helperText={errors.name ? errors.name.message : ""}
+                      />
+                    )}
+                  />
+                </Box>
+                <Box className="w-full">
+                  <Controller
+                    name="age"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomInputs
+                        {...field}
+                        label="Вік"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        placeholder="Роки / Місяці"
+                      />
+                    )}
+                  />
+                </Box>
               </Box>
-              <Box className="flex space-x-2">
-                <Controller
-                  name="height"
-                  control={control}
-                  render={({ field }) => (
-                    <CustomInputs
-                      {...field}
-                      label="Ріст"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      placeholder="См"
-                    />
-                  )}
-                />
+              <Box className="flex space-x-3">
+                <Box className="w-full">
+                  <Controller
+                    name="height"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomInputs
+                        {...field}
+                        label="Ріст"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        placeholder="См"
+                      />
+                    )}
+                  />
+                </Box>
                 <Controller
                   name="weight"
                   control={control}
@@ -130,7 +134,7 @@ const AnimalForm = () => {
                   )}
                 />
               </Box>
-              <Box className="flex space-x-2">
+              <Box className="flex md:space-x-3">
                 <Controller
                   name="breed"
                   control={control}
@@ -216,59 +220,65 @@ const AnimalForm = () => {
                 </Box>
                 <Box>
                   <Typography variant="h6">Тварина війни</Typography>
+                  <Box className="w-full">
+                    <Controller
+                      name="isWarAnimal"
+                      control={control}
+                      render={({ field }) => (
+                        <RadioGroup row {...field} defaultValue="false">
+                          <FormControlLabel
+                            value="true"
+                            control={<CustomRadio />}
+                            label="Так"
+                          />
+                          <FormControlLabel
+                            value="false"
+                            control={<CustomRadio />}
+                            label="Ні"
+                          />
+                        </RadioGroup>
+                      )}
+                    />
+                  </Box>
+                </Box>
+              </Box>
+              <Box className="flex flex-col md:flex-row justify-between md:space-x-3 space-y-3 md:space-y-0">
+                <Box className="w-full">
                   <Controller
-                    name="isWarAnimal"
+                    name="healthStatus"
                     control={control}
                     render={({ field }) => (
-                      <RadioGroup row {...field} defaultValue="false">
-                        <FormControlLabel
-                          value="true"
-                          control={<CustomRadio />}
-                          label="Так"
-                        />
-                        <FormControlLabel
-                          value="false"
-                          control={<CustomRadio />}
-                          label="Ні"
-                        />
-                      </RadioGroup>
+                      <CustomInputs
+                        {...field}
+                        label="Стан здоров’я"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        multiline
+                        rows={3}
+                        placeholder="Опишіть стан здоров’я тваринки"
+                      />
                     )}
                   />
                 </Box>
-              </Box>
-              <Box className="flex flex-col md:flex-row justify-between space-x-2">
-                <Controller
-                  name="healthStatus"
-                  control={control}
-                  render={({ field }) => (
-                    <CustomInputs
-                      {...field}
-                      label="Стан здоров’я"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      multiline
-                      rows={3}
-                      placeholder="Опишіть стан здоров’я тваринки"
-                    />
-                  )}
-                />
-                <Controller
-                  name="detailedDescription"
-                  control={control}
-                  render={({ field }) => (
-                    <CustomInputs
-                      {...field}
-                      label="Детальний опис"
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      multiline
-                      rows={3}
-                      placeholder="Опишіть вигляд та характер тваринки. ЇЇ звички та вподобання."
-                    />
-                  )}
-                />
+                <Box className="w-full">
+                  <Controller
+                    name="detailedDescription"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomInputs
+                        {...field}
+                        label="Детальний опис"
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        multiline
+                        rows={3}
+                        placeholder="Опишіть вигляд та характер тваринки. ЇЇ звички та вподобання."
+                      />
+                    )}
+                  />
+                </Box>
               </Box>
             </Box>
             <Box className="flex space-x-4">
@@ -282,8 +292,8 @@ const AnimalForm = () => {
                 />
               </Button>
             </Box>
-            <Box className="space-y-4 main-bg-color p-10 rounded-[20px]">
-              {role === "volunteer" && (
+            {role === "volunteer" && (
+              <Box className="space-y-4 main-bg-color p-10 rounded-[20px]">
                 <>
                   <Box>
                     <Controller
@@ -346,11 +356,23 @@ const AnimalForm = () => {
                     />
                   </Box>
                 </>
-              )}
+              </Box>
+            )}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <CustomButton
+                variant="contained"
+                type="submit"
+                sx={{ width: "450px" }}
+              >
+                {role === "volunteer" ? "Здати тварину" : "Створити оголошення"}
+              </CustomButton>
             </Box>
-            <CustomButton variant="contained" type="submit" fullWidth>
-              {role === "volunteer" ? "Здати тварину" : "Створити оголошення"}
-            </CustomButton>
           </form>
         </Box>
       </Box>
