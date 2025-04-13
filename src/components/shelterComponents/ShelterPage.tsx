@@ -1,9 +1,11 @@
 "use client";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import ProfileCard from "../../utils/ui/ProfileCard";
 import { AnimalAds } from "../../utils/ui/AnimalAds";
+import { selectUserStore } from "../../store/features/userSlise";
 
 const fetchShelterData = async (id: string) => {
   const data = {
@@ -34,6 +36,7 @@ const fetchShelterData = async (id: string) => {
 
 const ShelterPage = () => {
   const router = useRouter();
+  const selectUser = useSelector(selectUserStore);
   const { id } = router.query;
   const [shelterData, setShelterData] = useState(null);
   const [animals, setAnimals] = useState([]);
@@ -54,7 +57,7 @@ const ShelterPage = () => {
   return (
     <Box className="main-bg-color p-10">
       <ProfileCard
-        type="shelter"
+        type={selectUser?.userRole || "volunteer"}
         name={shelterData.name}
         email={shelterData.email}
         address={shelterData.address}
@@ -66,7 +69,7 @@ const ShelterPage = () => {
       />
       <AnimalAds
         animals={animals}
-        type="shelter"
+        type={selectUser?.userRole || "volunteer"}
         onEdit={() => {}}
         onDelete={() => {}}
       />
