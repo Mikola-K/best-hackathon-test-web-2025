@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Box, Typography, Divider } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
 import {
   CustomButton,
@@ -21,7 +21,7 @@ const LogInPage: React.FC = () => {
     handleSubmit,
     control,
     formState: { errors },
-    getValues,
+    // Removed unused getValues
   } = useForm();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -33,7 +33,7 @@ const LogInPage: React.FC = () => {
         dispatch(setAccessToken(response?.data.accessToken));
         // @ts-ignore
         dispatch(setUserData(response?.data));
-        dispatch(setUserRole("role"));
+        dispatch(setUserRole(response?.data.roles[0]));
         window.location.href = "/";
       })
       .catch((error) => {
@@ -94,12 +94,20 @@ const LogInPage: React.FC = () => {
               </Typography>
               <Controller
                 name="email"
-                  control={control}
+                control={control}
                 rules={{
                   required: "Email обов'язковий",
                   pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
                 }}
-                        helperText={
+                render={({ field }) => (
+                  <CustomInputs
+                    {...field}
+                    placeholder="Email"
+                    variant="outlined"
+                    size="small"
+                    type="email"
+                    error={!!errors.email}
+                    helperText={
                       errors.email
                         ? typeof errors.email.message === "string"
                           ? errors.email.message
@@ -138,7 +146,7 @@ const LogInPage: React.FC = () => {
               />
             </Box>
             <CustomButton variant="contained" sx={{ mt: 2 }} type="submit">
-              Війти
+              Увійти
             </CustomButton>
           </form>
         </Box>
