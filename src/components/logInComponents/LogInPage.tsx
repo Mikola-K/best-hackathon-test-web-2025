@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import {
   CustomButton,
   CustomInputs,
@@ -16,6 +17,7 @@ import { setUserData, setUserRole } from "../../store/features/userSlise";
 
 const LogInPage: React.FC = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { isMdScreen } = useMediaQueries();
   const {
     handleSubmit,
@@ -29,12 +31,10 @@ const LogInPage: React.FC = () => {
     authSignIn(data.email, data.password)
       .then((response) => {
         console.log("Login successful:", response);
-        // @ts-ignore
         dispatch(setAccessToken(response?.data.accessToken));
-        // @ts-ignore
         dispatch(setUserData(response?.data));
-        dispatch(setUserRole(response?.data.roles[0]));
-        window.location.href = "/";
+        dispatch(setUserRole(response?.data?.roles?.[0]));
+        router.push("/");
       })
       .catch((error) => {
         console.error("Login failed:", error);
@@ -54,8 +54,12 @@ const LogInPage: React.FC = () => {
               width={116}
               height={195}
             />
-            <b style={{marginTop: 20}}>Ви вже близько!</b>
-            <span style={{marginTop: 10, fontSize: 14}}>Завершіть вхід та отримайте доступ<br/>до функціоналу платформи ♡</span>
+            <b style={{ marginTop: 20 }}>Ви вже близько!</b>
+            <span style={{ marginTop: 10, fontSize: 14 }}>
+              Завершіть вхід та отримайте доступ
+              <br />
+              до функціоналу платформи ♡
+            </span>
           </Box>
           <Divider
             orientation={isMdScreen ? "vertical" : "horizontal"}
@@ -79,21 +83,13 @@ const LogInPage: React.FC = () => {
             >
               Вхід
             </Typography>
-            {errorMessage && (
-              <Typography
-                variant="body1"
-                color="error"
-                className="mb-3 text-center"
-              >
-                {errorMessage}
-              </Typography>
-            )}
             <Box sx={{ mb: 0 }}>
               <Typography variant="h6" className="mb-2" fontWeight={600}>
                 Email
               </Typography>
               <Controller
                 name="email"
+                control={control}
                 control={control}
                 rules={{
                   required: "Email обов'язковий",
@@ -109,6 +105,15 @@ const LogInPage: React.FC = () => {
                     error={!!errors.email}
                     helperText={
                       errors.email
+                render={({ field }) => (
+                  <CustomInputs
+                    {...field}
+                    placeholder="e-mail"
+                    variant="outlined"
+                    size="small"
+                    error={!!errors.email}
+                    helperText={
+                      errorMessage || errors.email
                         ? typeof errors.email.message === "string"
                           ? errors.email.message
                           : " "

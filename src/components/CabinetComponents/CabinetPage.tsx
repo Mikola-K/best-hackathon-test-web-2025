@@ -6,6 +6,7 @@ import { Box, Typography } from "@mui/material";
 import ProfileCard from "../../utils/ui/ProfileCard";
 import { selectUserStore } from "../../store/features/userSlise";
 import { AnimalAds } from "../../utils/ui/AnimalAds";
+import volenteerImage from "../../assets/images/volenteerImage.png";
 
 const fetchShelterData = async (id: string) => {
   const data = {
@@ -15,7 +16,7 @@ const fetchShelterData = async (id: string) => {
       address: "вул. Притулок 17, м. Львів",
       description: "Ми вільний, неприбутковий притулок для вуличних тварин.",
       phone: "+38 (097) xxx xx xx",
-      imageUrl: "/path/to/shelter-image.jpg",
+      imageUrl: volenteerImage,
     },
     animals: [
       {
@@ -65,7 +66,11 @@ const CabinetPage = () => {
         description={shelterData.description}
         phone={shelterData.phone}
         imageUrl={shelterData.imageUrl}
-        buttonText="Розмістити оголошення"
+        buttonText={
+          selectUser?.userRole === "volunteer"
+            ? "Здати тварину"
+            : "Розмістити оголошення"
+        }
         editProfileUrl="/edit-shelter-profile"
       />
       <div className="mt-4 md:mt-0 mx-auto">
