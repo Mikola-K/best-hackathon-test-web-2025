@@ -78,6 +78,7 @@ const FilterComponent = ({ onApplyFilters }) => {
             {label}
           </Typography>
           <Controller
+          // @ts-ignore
             name={name}
             control={control}
             render={({ field }) => (

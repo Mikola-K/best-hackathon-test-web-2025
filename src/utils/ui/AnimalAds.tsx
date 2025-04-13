@@ -63,7 +63,7 @@ const AnimalAds = ({ animals, type, onEdit, onDelete }) => {
           mt: 4,
         }}
       >
-        {animals.slice(0, 2).map((animal) => (
+        {animals.slice(0, 2).map((animal: any) => (
           <AnimalCard
             key={animal.id}
             animal={animal}
@@ -83,7 +83,7 @@ const AnimalAds = ({ animals, type, onEdit, onDelete }) => {
           alignItems: "center",
         }}
       >
-        {animals.slice(2).map((animal) => (
+        {animals.slice(2).map((animal: any) => (
           <AnimalCard
             key={animal.id}
             animal={animal}

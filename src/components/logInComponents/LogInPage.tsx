@@ -79,7 +79,13 @@ const LogInPage: React.FC = () => {
                     variant="outlined"
                     size="small"
                     error={!!errors.email}
-                    helperText={errors.email?.message || " "}
+                    helperText={
+                      errors.email
+                        ? typeof errors.email.message === "string"
+                          ? errors.email.message
+                          : " "
+                        : " "
+                    }
                   />
                 )}
               />
@@ -100,7 +106,13 @@ const LogInPage: React.FC = () => {
                     size="small"
                     type="password"
                     error={!!errors.password}
-                    helperText={errors.password?.message || " "}
+                    helperText={
+                      errors.password
+                        ? typeof errors.password.message === "string"
+                          ? errors.password.message
+                          : " "
+                        : " "
+                    }
                   />
                 )}
               />

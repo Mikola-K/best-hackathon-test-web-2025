@@ -13,7 +13,7 @@ export default function ClientProvider({ children }: ClientProviderProps) {
   const initialPreloadedState = {};
 
   let isShowNavBarAndFooter = false;
-  if (window) {
+  if (typeof window !== "undefined") {
     isShowNavBarAndFooter =
       window?.location?.pathname !== "/login" &&
       window?.location?.pathname !== "/register";

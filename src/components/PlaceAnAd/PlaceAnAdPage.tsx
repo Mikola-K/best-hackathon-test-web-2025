@@ -32,6 +32,8 @@ type FormData = {
   email: string;
   phone: string;
   location: string;
+  weight: number;
+  height: number | string;
 };
 
 const AnimalForm = () => {
