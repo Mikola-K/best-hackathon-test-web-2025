@@ -72,7 +72,6 @@ const FilterComponent = ({ onApplyFilters }) => {
   return (
     <Box className="filter-sidebar" sx={{ width: 300 }}>
       <Typography variant="h6">Фільтри</Typography>
-
       {filters.map(({ name, label, options }) => (
         <Box key={name} sx={{ marginBottom: 2 }}>
           <Typography variant="body2" fontWeight={600}>
@@ -96,7 +95,6 @@ const FilterComponent = ({ onApplyFilters }) => {
           />
         </Box>
       ))}
-
       <CustomButton
         fullWidth
         variant="contained"

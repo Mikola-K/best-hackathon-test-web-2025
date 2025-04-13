@@ -15,7 +15,7 @@ type FormProps = {
   additionalFields: any;
 };
 
-const LogInForm = ({
+const RegisterForm = ({
   formType,
   formTitle,
   image,
@@ -269,4 +269,4 @@ const LogInForm = ({
   );
 };
 
-export default LogInForm;
+export default RegisterForm;

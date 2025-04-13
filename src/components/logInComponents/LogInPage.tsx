@@ -1,88 +1,109 @@
 "use client";
 import { useState } from "react";
-import { Box, Divider } from "@mui/material";
-import { CustomButton } from "../common/styles/customStyledComponents/customStyledComponents";
+import { Box, Typography, Divider } from "@mui/material";
+import {
+  CustomButton,
+  CustomInputs,
+} from "../common/styles/customStyledComponents/customStyledComponents";
 import { useMediaQueries } from "../../utils/hooks/useMediaQueries";
 import Image from "next/image";
 import volunteerIcon from "../../assets/images/volunteerIcon.png";
-import shelterIcon from "../../assets/images/shelterIcon.png";
-import logInVolunteerImage from "../../assets/images/logInVolunteerImage.png";
-import logInShelterImage from "../../assets/images/logInShelterImage.png";
-import LogInForm from "./LogInForm";
+import { useForm, Controller } from "react-hook-form";
 
 const LogInPage: React.FC = () => {
   const { isMdScreen } = useMediaQueries();
-  const [formType, setFormType] = useState<"select" | "volunteer" | "shelter">(
-    "select"
-  );
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    getValues,
+  } = useForm();
 
-  const handleFormTypeChange = (type: "volunteer" | "shelter") => {
-    setFormType(type);
+  const onSubmit = (data: any) => {
+    console.log(data);
   };
+
   return (
     <Box className="main-bg-color flex justify-center">
-      {formType === "select" && (
-        <Box className="main-bg-color flex flex-col items-center justify-center p-10 h-screen">
-          <Box className="main-white-bg-color w-full md:w-auto px-[15px] pt-[24px] pb-[24px] md:px-[60px] md:pt-[25px] md:pb-[40px] rounded-[20px] flex flex-col md:flex-row justify-between items-center ">
-            <Box className="flex flex-col items-center text-center min-w-[218px]">
-              <Image
-                src={volunteerIcon}
-                alt="Volunteer Icon"
-                width={116}
-                height={195}
-              />
-              <CustomButton
-                variant="contained"
-                sx={{ mt: 5 }}
-                onClick={() => handleFormTypeChange("volunteer")}
-              >
-                Я волонтер
-              </CustomButton>
-            </Box>
-            <Divider
-              orientation={isMdScreen ? "vertical" : "horizontal"}
-              flexItem
-              sx={{
-                borderColor: "#05334A",
-                borderWidth: 1.5,
-                mx: isMdScreen ? 7.5 : 0,
-                my: isMdScreen ? 0 : 3.5,
-              }}
+      <Box className="main-bg-color flex flex-col items-center justify-center p-10 h-screen">
+        <Box className="main-white-bg-color w-full md:w-auto px-[15px] pt-[24px] pb-[24px] md:px-[60px] md:pt-[25px] md:pb-[40px] rounded-[20px] flex flex-col md:flex-row justify-between items-center ">
+          <Box className="flex flex-col items-center text-center min-w-[218px]">
+            <Image
+              src={volunteerIcon}
+              alt="Volunteer Icon"
+              width={116}
+              height={195}
             />
-            <Box className="flex flex-col">
-              <Image
-                src={shelterIcon}
-                alt="Shelter Icon"
-                width={218}
-                height={201}
-              />
-              <CustomButton
-                variant="contained"
-                sx={{ mt: 4 }}
-                onClick={() => handleFormTypeChange("shelter")}
-              >
-                Ми притулок
-              </CustomButton>
-            </Box>
           </Box>
+          <Divider
+            orientation={isMdScreen ? "vertical" : "horizontal"}
+            flexItem
+            sx={{
+              borderColor: "#05334A",
+              borderWidth: 1.5,
+              mx: isMdScreen ? 7.5 : 0,
+              my: isMdScreen ? 0 : 3.5,
+            }}
+          />
+
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col md:justify-evenly   mt-4"
+          >
+            <Typography
+              variant="h6"
+              className="mb-3 text-center"
+              fontWeight={600}
+            >
+              Вхід
+            </Typography>
+            <Box sx={{ mb: 0 }}>
+              <Typography variant="h6" className="mb-2" fontWeight={600}>
+                e-mail
+              </Typography>
+              <Controller
+                name="email"
+                control={control}
+                rules={{
+                  required: "e-mail обов'язковий",
+                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                }}
+                render={({ field }) => (
+                  <CustomInputs
+                    {...field}
+                    placeholder="e-mail"
+                    variant="outlined"
+                    size="small"
+                    error={!!errors.email}
+                    helperText={errors.email?.message || " "}
+                  />
+                )}
+              />
+            </Box>
+            <Box sx={{ mb: 0 }}>
+              <Typography variant="h6" className="mb-2" fontWeight={600}>
+                Пароль
+              </Typography>
+              <Controller
+                name="password"
+                control={control}
+                rules={{ required: "Пароль обов'язковий" }}
+                render={({ field }) => (
+                  <CustomInputs
+                    {...field}
+                    placeholder="Пароль"
+                    variant="outlined"
+                    size="small"
+                    type="password"
+                    error={!!errors.password}
+                    helperText={errors.password?.message || " "}
+                  />
+                )}
+              />
+            </Box>
+          </form>
         </Box>
-      )}
-      {formType === "volunteer" && (
-        <LogInForm
-          formType="volunteer"
-          formTitle="Приєднуйтесь до нас як Волонтер"
-          image={logInVolunteerImage}
-          additionalFields={null}
-        />
-      )}
-      {formType === "shelter" && (
-        <LogInForm
-          formType="shelter"
-          formTitle="Приєднуйтесь до нас як Притулок"
-          image={logInShelterImage}
-          additionalFields={null}
-        />
-      )}
+      </Box>
     </Box>
   );
 };

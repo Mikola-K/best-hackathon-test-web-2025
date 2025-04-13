@@ -38,6 +38,7 @@ const ShelterPage = () => {
   const id = 2;
   const [shelterData, setShelterData] = useState(null);
   const [animals, setAnimals] = useState([]);
+  
 
   useEffect(() => {
     if (id) {

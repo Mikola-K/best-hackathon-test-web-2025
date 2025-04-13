@@ -21,15 +21,17 @@ export const metadata: Metadata = {
   description: "Save the animal - Lapka",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const allHeaders = headers();
   const referer = allHeaders.get("referer");
+  const url = referer ? new URL(referer) : null;
 
-  const isLoginPage = referer && referer.includes("/login");
+  const isLoginPage =
+    referer && (url?.pathname == "/login" || url?.pathname == "/register");
 
   return (
     <html lang="en">
