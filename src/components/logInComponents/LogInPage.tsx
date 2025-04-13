@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import {
   CustomButton,
   CustomInputs,
@@ -16,6 +17,7 @@ import { setUserData, setUserRole } from "../../store/features/userSlise";
 
 const LogInPage: React.FC = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { isMdScreen } = useMediaQueries();
   const {
     handleSubmit,
@@ -29,12 +31,10 @@ const LogInPage: React.FC = () => {
     authSignIn(data.email, data.password)
       .then((response) => {
         console.log("Login successful:", response);
-        // @ts-ignore
         dispatch(setAccessToken(response?.data.accessToken));
-        // @ts-ignore
         dispatch(setUserData(response?.data));
-        dispatch(setUserRole("role"));
-        window.location.href = "/";
+        dispatch(setUserRole(response?.data?.role));
+        router.push("/");
       })
       .catch((error) => {
         console.error("Login failed:", error);
