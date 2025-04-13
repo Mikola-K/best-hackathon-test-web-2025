@@ -1,13 +1,11 @@
 "use client";
-import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Typography,
   Button,
   FormControlLabel,
-  Checkbox,
-  TextField,
   RadioGroup,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
@@ -40,6 +38,7 @@ type FormData = {
 };
 
 const AnimalForm = () => {
+  const router = useRouter();
   const selectUser = useSelector(selectUserStore);
   const role = selectUser?.userRole || "volunteer";
 
@@ -54,6 +53,7 @@ const AnimalForm = () => {
     console.log(data);
     const animalsData = await postAnimals(data);
     console.log("response", animalsData);
+    router.push("/");
   };
 
   return (

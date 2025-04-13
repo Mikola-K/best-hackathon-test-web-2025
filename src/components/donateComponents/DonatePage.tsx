@@ -20,7 +20,8 @@ const DonatePage: React.FC = () => {
               height={195}
             />
             <Typography mt={2} fontWeight={700} fontSize={24}>
-              Зроби світ кращим!
+              Зроби світ кращим!<br/>
+              <small>Підтримай актуальний збір ♡</small>
             </Typography>
           </Box>
           <Divider
@@ -35,7 +36,7 @@ const DonatePage: React.FC = () => {
           />
           <Box>
             <CustomButton
-              onClick={() => window.open("https://monobank.ua/", "_blank")}
+              onClick={() => window.open("https://send.monobank.ua/jar/A83rauHGrm", "_blank")}
             >
               Задонатити
             </CustomButton>
