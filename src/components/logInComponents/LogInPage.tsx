@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { Box, Typography, Divider } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { useForm, Controller } from "react-hook-form";
 import {
   CustomButton,
   CustomInputs,
@@ -8,9 +10,10 @@ import {
 import { useMediaQueries } from "../../utils/hooks/useMediaQueries";
 import Image from "next/image";
 import volunteerIcon from "../../assets/images/volunteerIcon.png";
-import { useForm, Controller } from "react-hook-form";
+import { setAccessToken } from "../../store/features/authSlice";
 
 const LogInPage: React.FC = () => {
+  const dispatch = useDispatch();
   const { isMdScreen } = useMediaQueries();
   const {
     handleSubmit,
@@ -21,6 +24,7 @@ const LogInPage: React.FC = () => {
 
   const onSubmit = (data: any) => {
     console.log(data);
+    dispatch(setAccessToken("123"));
   };
 
   return (

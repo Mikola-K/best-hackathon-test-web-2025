@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "../components/common/styles/main.css";
-import NavBar from "../components/common/NavBar";
-import Footer from "../components/common/Footer";
+import ClientProvider from "../utils/client/ClientProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,26 +24,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const allHeaders = headers();
-  const referer = allHeaders.get("referer");
-  const url = referer ? new URL(referer) : null;
-
-  const isLoginPage =
-    referer && (url?.pathname == "/login" || url?.pathname == "/register");
-
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {!isLoginPage && (
-          <>
-            <NavBar />
-            {children}
-            <Footer />
-          </>
-        )}
-        {isLoginPage && <>{children}</>}
+        <ClientProvider>{children}</ClientProvider>
       </body>
     </html>
   );
