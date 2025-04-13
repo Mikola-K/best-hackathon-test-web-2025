@@ -1,14 +1,16 @@
 "use client";
 import { Box, Typography, Link } from "@mui/material";
 
-const FooterSection = ({ title, items }) => (
+const FooterSection = ({ title, links, items }) => (
   <Box
     sx={{ flex: 1, marginBottom: { xs: "20px", md: 0 }, textAlign: "center" }}
   >
     <Typography variant="h6" sx={{ fontWeight: 700 }}>
-      {title}
+       {title}
     </Typography>
-    {items.map((item, index) => (
+    {items.map((item, index) => {
+      const [text, link] = item.split("|");
+      return (
       <Typography
         variant="body2"
         key={index}
@@ -16,21 +18,34 @@ const FooterSection = ({ title, items }) => (
         fontWeight={700}
         fontSize={16}
       >
-        {item}
+        {link ? (
+        <Link href={link} underline="none" color="inherit">
+          {text}
+        </Link>
+        ) : (
+        text
+        )}
       </Typography>
-    ))}
-  </Box>
-);
+      );
+    })}
+    </Box>
+  );
 
-const Footer = () => {
-  const infoItems = ["Про нас", "Донат", "Новини", "Блог", "Наша місія"];
+  const Footer = () => {
+    const infoItems = [
+    "Про нас|/faq",
+    "Донат|/donate",
+    "Новини|/news",
+    "Pet Stories|/petstories",
+    "Наша місія|/mission",
+    ];
 
   const contactItems = [
     "Телефони:",
-    "+38 (097) xxx xx xx",
-    "+38 (097) xxx xx xx",
+    "+38 (097) 363 18 88",
+    "+38 (097) 363 18 89",
     "Юридична адреса:",
-    "вул. Притулок, м. Київ",
+    "вул. Притули, 18, м. Київ",
   ];
 
   return (
@@ -53,13 +68,13 @@ const Footer = () => {
           marginBottom: { xs: "20px", md: 0 },
         }}
       >
-        <Typography variant="body2" sx={{ marginBottom: "10px" }}>
+        <Typography variant="body2" sx={{ marginBottom: "30px" }}>
           Всі офіційні донати збори LАПКА ми публікуємо на цьому сайті. Ми не
           несемо відповідальності за збори інших людей чи організацій на нашу
           підтримку, опубліковані на сторонніх платформах.
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          ©2025
+          © 2025
         </Typography>
       </Box>
       <FooterSection title="Контакти" items={contactItems} />
