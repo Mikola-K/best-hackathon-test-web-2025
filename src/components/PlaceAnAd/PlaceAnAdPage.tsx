@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Box,
   Typography,
@@ -15,6 +16,7 @@ import {
   CustomInputs,
   CustomRadio,
 } from "../common/styles/customStyledComponents/customStyledComponents";
+import { selectUserStore } from "../../store/features/userSlise";
 
 type FormData = {
   role: string;
@@ -37,7 +39,9 @@ type FormData = {
 };
 
 const AnimalForm = () => {
-  const [role, setRole] = useState("volunteer");
+  const selectUser = useSelector(selectUserStore);
+  const role = selectUser?.userRole || "volunteer";
+
   const {
     handleSubmit,
     control,
@@ -47,11 +51,6 @@ const AnimalForm = () => {
 
   const onSubmit = (data: FormData) => {
     console.log(data);
-  };
-
-  const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRole(event.target.value);
-    setValue("role", event.target.value);
   };
 
   return (

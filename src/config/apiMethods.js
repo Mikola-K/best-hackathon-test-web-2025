@@ -6,7 +6,8 @@ export const authSignIn = async (email, password) => {
       email,
       password,
     });
-    return !_.isEmpty(userData) ? userData : null;
+    // return !_.isEmpty(userData) ? userData : null;
+    return userData;
   } catch (error) {
     throw new Error(error?.response?.data?.message);
   }
