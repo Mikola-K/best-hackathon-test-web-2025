@@ -33,7 +33,7 @@ const LogInPage: React.FC = () => {
         console.log("Login successful:", response);
         dispatch(setAccessToken(response?.data.accessToken));
         dispatch(setUserData(response?.data));
-        dispatch(setUserRole(response?.data?.role));
+        dispatch(setUserRole(response?.data?.roles?.[0]));
         router.push("/");
       })
       .catch((error) => {
