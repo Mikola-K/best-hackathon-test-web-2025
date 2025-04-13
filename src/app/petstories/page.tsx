@@ -1,11 +1,10 @@
-import LogInPage from "../../components/logInComponents/LogInPage";
-const Login = () => {
+const PetsStories = () => {
   return (
-    <iframe 
-      src="https://petstorieslapka.hashnode.dev/" 
-      style={{ width: "100vw", height: "100vh", border: "none" }} 
+    <iframe
+      src="https://petstorieslapka.hashnode.dev/"
+      style={{ width: "100vw", height: "100vh", border: "none" }}
     ></iframe>
   );
 };
 
-export default Login;
+export default PetsStories;
