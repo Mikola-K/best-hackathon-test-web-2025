@@ -11,7 +11,7 @@ import { useMediaQueries } from "../../utils/hooks/useMediaQueries";
 type FormProps = {
   formType: "volunteer" | "shelter";
   formTitle: string;
-  image: string;
+  image: any;
   additionalFields: any;
 };
 
@@ -79,7 +79,13 @@ const RegisterForm = ({
                     variant="outlined"
                     size="small"
                     error={!!errors.email}
-                    helperText={errors.email?.message || " "}
+                    helperText={
+                      errors.email
+                        ? typeof errors.email.message === "string"
+                          ? errors.email.message
+                          : " "
+                        : " "
+                    }
                   />
                 )}
               />
@@ -100,7 +106,13 @@ const RegisterForm = ({
                       variant="outlined"
                       size="small"
                       error={!!errors.shelterName}
-                      helperText={errors.shelterName?.message || " "}
+                      helperText={
+                        errors.shelterName
+                          ? typeof errors.shelterName.message === "string"
+                            ? errors.shelterName.message
+                            : " "
+                          : " "
+                      }
                     />
                   )}
                 />
@@ -123,7 +135,13 @@ const RegisterForm = ({
                         variant="outlined"
                         size="small"
                         error={!!errors.firstName}
-                        helperText={errors.firstName?.message || " "}
+                        helperText={
+                          errors.firstName
+                            ? typeof errors.firstName.message === "string"
+                              ? errors.firstName.message
+                              : " "
+                            : " "
+                        }
                       />
                     )}
                   />
@@ -143,7 +161,13 @@ const RegisterForm = ({
                         variant="outlined"
                         size="small"
                         error={!!errors.lastName}
-                        helperText={errors.lastName?.message || " "}
+                        helperText={
+                          errors.lastName
+                            ? typeof errors.lastName.message === "string"
+                              ? errors.lastName.message
+                              : " "
+                            : " "
+                        }
                       />
                     )}
                   />
@@ -197,7 +221,13 @@ const RegisterForm = ({
                     size="small"
                     type="password"
                     error={!!errors.password}
-                    helperText={errors.password?.message || " "}
+                    helperText={
+                      errors.password
+                        ? typeof errors.password.message === "string"
+                          ? errors.password.message
+                          : " "
+                        : " "
+                    }
                   />
                 )}
               />
@@ -222,7 +252,13 @@ const RegisterForm = ({
                     size="small"
                     type="password"
                     error={!!errors.confirmPassword}
-                    helperText={errors.confirmPassword?.message || " "}
+                    helperText={
+                      errors.confirmPassword
+                        ? typeof errors.confirmPassword.message === "string"
+                          ? errors.confirmPassword.message
+                          : " "
+                        : " "
+                    }
                   />
                 )}
               />

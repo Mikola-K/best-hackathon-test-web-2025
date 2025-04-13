@@ -4,7 +4,7 @@ import Image from "next/image";
 
 type ProfileCardProps = {
   type: "volunteer" | "shelter";
-  name: string;
+  name: string | null;
   email: string;
   address: string;
   description: string;

@@ -16,7 +16,7 @@ import FilterComponent from "./FilterComponent";
 
 const AnimalPage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [animals, setAnimals] = useState([
+  const [animals, setAnimals] = useState<any>([
     {
       id: 1,
       name: "Бобік",
@@ -35,7 +35,7 @@ const AnimalPage = () => {
     },
   ]);
   const [filteredAnimals, setFilteredAnimals] = useState([]);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<any>({
     warAnimal: "all",
     gender: "all",
     breed: "all",

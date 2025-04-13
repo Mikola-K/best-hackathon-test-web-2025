@@ -35,10 +35,9 @@ const fetchShelterData = async (id: string) => {
 const ShelterPage = () => {
   // const router = useRouter();
   // const { id } = router.query;
-  const id = 2;
-  const [shelterData, setShelterData] = useState(null);
-  const [animals, setAnimals] = useState([]);
-  
+  const id = "2";
+  const [shelterData, setShelterData] = useState<any>(null);
+  const [animals, setAnimals] = useState<any>([]);
 
   useEffect(() => {
     if (id) {

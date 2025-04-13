@@ -31,6 +31,7 @@ type CustomTextFieldProps = Omit<TextFieldProps, "borderRadius" | "border"> & {
   bgHelperTextColor?: string;
   primaryColor?: string;
   grayColor?: string;
+  helperText?: React.ReactNode | string;
 };
 
 type CustomSelectProps = SelectProps & {

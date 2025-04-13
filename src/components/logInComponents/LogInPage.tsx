@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { Box, Typography, Divider } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { useForm, Controller } from "react-hook-form";
 import {
   CustomButton,
   CustomInputs,
@@ -10,8 +12,10 @@ import Image from "next/image";
 import volunteerIcon from "../../assets/images/volunteerIcon.png";
 import { useForm, Controller } from "react-hook-form";
 import { authSignIn } from "../../config/apiMethods"
+import { setAccessToken } from "../../store/features/authSlice";
 
 const LogInPage: React.FC = () => {
+  const dispatch = useDispatch();
   const { isMdScreen } = useMediaQueries();
   const {
     handleSubmit,
@@ -30,6 +34,8 @@ const LogInPage: React.FC = () => {
         console.error("Login failed:", error);
         // Handle login failure (e.g., show error message)
       });
+    console.log(data);
+    dispatch(setAccessToken("123"));
   };
 
   return (
@@ -84,7 +90,13 @@ const LogInPage: React.FC = () => {
                     variant="outlined"
                     size="small"
                     error={!!errors.email}
-                    helperText={errors.email?.message || " "}
+                    helperText={
+                      errors.email
+                        ? typeof errors.email.message === "string"
+                          ? errors.email.message
+                          : " "
+                        : " "
+                    }
                   />
                 )}
               />
@@ -105,7 +117,13 @@ const LogInPage: React.FC = () => {
                     size="small"
                     type="password"
                     error={!!errors.password}
-                    helperText={errors.password?.message || " "}
+                    helperText={
+                      errors.password
+                        ? typeof errors.password.message === "string"
+                          ? errors.password.message
+                          : " "
+                        : " "
+                    }
                   />
                 )}
               />
