@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Image from "next/image";
 import {
   AppBar,
@@ -18,8 +19,11 @@ import {
 import favicon from "../../assets/icons/favicon.svg";
 import { selectUserStore } from "../../store/features/userSlise";
 import { CustomButton } from "./styles/customStyledComponents/customStyledComponents";
+import { setAccessToken } from "../../store/features/authSlice";
+import { setUserData, setUserRole } from "../../store/features/userSlise";
 
 const NavBar = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const selectUser = useSelector(selectUserStore);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -30,6 +34,13 @@ const NavBar = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogOut = () => {
+    dispatch(setAccessToken(null));
+    dispatch(setUserData({}));
+    dispatch(setUserRole(null));
+    router.push("/login");
   };
 
   return (
@@ -92,7 +103,13 @@ const NavBar = () => {
                 <MenuItem onClick={handleMenuClose}>Служба підтримки</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Налаштування</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Додати акаунт</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Вийти</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleLogOut(), handleMenuClose;
+                  }}
+                >
+                  Вийти
+                </MenuItem>
               </Menu>
             </>
           ) : (
