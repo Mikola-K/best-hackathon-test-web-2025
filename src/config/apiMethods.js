@@ -25,3 +25,28 @@ export const getCategoriesForModal = async (alias) => {
 
   return categoriesData;
 };
+
+export const getAllAnimals = async (data) => {
+  const animalsData = await axios
+    .post(`/animals`, {
+      searchQuery: "string",
+      orderBy: 0,
+      orderByField: "string",
+      except: "string",
+      page: 0,
+      amountOnPage: 0,
+      favoritesOnly: true,
+      type: 0,
+      minAge: 0,
+      maxAge: 0,
+      healthStatus: 0,
+      location: "string",
+      sex: true,
+      isSterilized: true,
+      hasPassport: true,
+    })
+    .then(({ data }) => data)
+    .catch((e) => e);
+
+  return animalsData;
+};
