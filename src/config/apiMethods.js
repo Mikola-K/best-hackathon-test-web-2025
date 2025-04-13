@@ -72,3 +72,35 @@ export const getAllAnimals = async (data) => {
 
   return animalsData;
 };
+
+export const postAnimals = async (data) => {
+  try {
+    const animalsData = await axios.post(`/animals/create`, {
+      name: data.name,
+      location: data.location,
+      person: data.contactName,
+      phone: data.phone,
+      email: data.email,
+      breed: data.breed,
+      sex: data.gender === "female" ? false : true,
+      age: Number(data.age),
+      height: Number(data.height),
+      weight: Number(data.weight),
+      hasPassport: data.hasPassport === "true",
+      war: data.isWarAnimal ? "Так" : "Ні",
+      images: data.images,
+      isWarAnimal: data.isWarAnimal === "true",
+      isSterilized: data.isSterilized === "true",
+      type: 0,
+      healthStatus: data.healthStatus,
+      description: data.detailedDescription,
+      donationLink: data.donationLink,
+      additionDate: new Date().toISOString(),
+    });
+
+    return animalsData;
+  } catch (error) {
+    console.error("Error posting animal data:", error);
+    return error;
+  }
+};

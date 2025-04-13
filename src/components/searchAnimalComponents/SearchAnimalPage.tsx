@@ -108,16 +108,16 @@ const AnimalPage = () => {
     setFilteredAnimals(filtered);
   };
 
-  const handleTest = async () => {
-    const response = getAllAnimals();
-    console.log("get all animals", response);
+  const fetchAllAnimals = async () => {
+    const data = await getAllAnimals();
+    setAnimals(data?.items);
   };
 
+  useEffect(() => {
+    // fetchAllAnimals();
+  }, []);
   return (
     <Box className="main-container py-4 md:pb-10 px-1 md:px-6">
-      <CustomButton onClick={handleTest} variant="contained">
-        TEMP
-      </CustomButton>
       <Box className="flex flex-col md:flex-row space-y-3 items-center md:justify-center px-4 md:px-0">
         {!isMdScreen && (
           <>
