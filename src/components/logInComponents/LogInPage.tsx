@@ -90,10 +90,12 @@ const LogInPage: React.FC = () => {
               <Controller
                 name="email"
                 control={control}
-                control={control}
                 rules={{
                   required: "Email обов'язковий",
-                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                    message: "Неправильний формат email",
+                  },
                 }}
                 render={({ field }) => (
                   <CustomInputs
@@ -104,20 +106,7 @@ const LogInPage: React.FC = () => {
                     type="email"
                     error={!!errors.email}
                     helperText={
-                      errors.email
-                render={({ field }) => (
-                  <CustomInputs
-                    {...field}
-                    placeholder="e-mail"
-                    variant="outlined"
-                    size="small"
-                    error={!!errors.email}
-                    helperText={
-                      errorMessage || errors.email
-                        ? typeof errors.email.message === "string"
-                          ? errors.email.message
-                          : " "
-                        : " "
+                      errorMessage || (errors.email?.message as string) || " "
                     }
                   />
                 )}
