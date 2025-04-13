@@ -10,8 +10,7 @@ import {
 import { useMediaQueries } from "../../utils/hooks/useMediaQueries";
 import Image from "next/image";
 import volunteerIcon from "../../assets/images/volunteerIcon.png";
-import { useForm, Controller } from "react-hook-form";
-import { authSignIn } from "../../config/apiMethods"
+import { authSignIn } from "../../config/apiMethods";
 import { setAccessToken } from "../../store/features/authSlice";
 
 const LogInPage: React.FC = () => {
@@ -23,19 +22,20 @@ const LogInPage: React.FC = () => {
     formState: { errors },
     getValues,
   } = useForm();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = (data: any) => {
     authSignIn(data.email, data.password)
       .then((response) => {
         console.log("Login successful:", response);
-        // Handle successful login (e.g., redirect to dashboard)
+        dispatch(setAccessToken(response.data.accessToken));
+        window.location.href = "/";
       })
       .catch((error) => {
         console.error("Login failed:", error);
-        // Handle login failure (e.g., show error message)
+        setErrorMessage("Неправильний email або пароль");
       });
     console.log(data);
-    dispatch(setAccessToken("123"));
   };
 
   return (
@@ -49,6 +49,8 @@ const LogInPage: React.FC = () => {
               width={116}
               height={195}
             />
+            <b style={{marginTop: 20}}>Ви вже близько!</b>
+            <span style={{marginTop: 10, fontSize: 14}}>Завершіть вхід та отримайте доступ<br/>до функціоналу платформи ♡</span>
           </Box>
           <Divider
             orientation={isMdScreen ? "vertical" : "horizontal"}
@@ -63,7 +65,7 @@ const LogInPage: React.FC = () => {
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col md:justify-evenly   mt-4"
+            className="flex flex-col md:justify-evenly mt-4"
           >
             <Typography
               variant="h6"
@@ -72,15 +74,24 @@ const LogInPage: React.FC = () => {
             >
               Вхід
             </Typography>
+            {errorMessage && (
+              <Typography
+                variant="body1"
+                color="error"
+                className="mb-3 text-center"
+              >
+                {errorMessage}
+              </Typography>
+            )}
             <Box sx={{ mb: 0 }}>
               <Typography variant="h6" className="mb-2" fontWeight={600}>
-                e-mail
+                Email
               </Typography>
               <Controller
                 name="email"
                 control={control}
                 rules={{
-                  required: "e-mail обов'язковий",
+                  required: "Email обов'язковий",
                   pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
                 }}
                 render={({ field }) => (
