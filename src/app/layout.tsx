@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "../components/common/styles/main.css";
+import NavBar from "../components/common/NavBar";
+import Footer from "../components/common/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,15 +23,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const allHeaders = headers();
+  const referer = allHeaders.get("referer");
+
+  const isLoginPage = referer && referer.includes("/login");
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        {!isLoginPage && (
+          <>
+            <NavBar />
+            {children}
+            <Footer />
+          </>
+        )}
+        {isLoginPage && <>{children}</>}
       </body>
     </html>
   );
