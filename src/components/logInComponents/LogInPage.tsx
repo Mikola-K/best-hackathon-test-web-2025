@@ -81,7 +81,7 @@ const LogInPage: React.FC = () => {
               />
             </Box>
             <Box sx={{ mb: 0 }}>
-              <Typography variant="h6" className="mb-2" fontWeight={600}>
+              <Typography variant="h6" fontWeight={600}>
                 Пароль
               </Typography>
               <Controller
@@ -101,6 +101,9 @@ const LogInPage: React.FC = () => {
                 )}
               />
             </Box>
+            <CustomButton variant="contained" sx={{ mt: 2 }} type="submit">
+              Війти
+            </CustomButton>
           </form>
         </Box>
       </Box>
