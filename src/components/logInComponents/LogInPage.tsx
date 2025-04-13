@@ -9,6 +9,7 @@ import { useMediaQueries } from "../../utils/hooks/useMediaQueries";
 import Image from "next/image";
 import volunteerIcon from "../../assets/images/volunteerIcon.png";
 import { useForm, Controller } from "react-hook-form";
+import { authSignIn } from "../../config/apiMethods"
 
 const LogInPage: React.FC = () => {
   const { isMdScreen } = useMediaQueries();
@@ -20,7 +21,15 @@ const LogInPage: React.FC = () => {
   } = useForm();
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    authSignIn(data.email, data.password)
+      .then((response) => {
+        console.log("Login successful:", response);
+        // Handle successful login (e.g., redirect to dashboard)
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+        // Handle login failure (e.g., show error message)
+      });
   };
 
   return (
