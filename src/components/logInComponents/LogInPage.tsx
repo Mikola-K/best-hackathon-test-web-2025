@@ -54,8 +54,12 @@ const LogInPage: React.FC = () => {
               width={116}
               height={195}
             />
-            <b style={{marginTop: 20}}>Ви вже близько!</b>
-            <span style={{marginTop: 10, fontSize: 14}}>Завершіть вхід та отримайте доступ<br/>до функціоналу платформи ♡</span>
+            <b style={{ marginTop: 20 }}>Ви вже близько!</b>
+            <span style={{ marginTop: 10, fontSize: 14 }}>
+              Завершіть вхід та отримайте доступ
+              <br />
+              до функціоналу платформи ♡
+            </span>
           </Box>
           <Divider
             orientation={isMdScreen ? "vertical" : "horizontal"}
@@ -79,28 +83,26 @@ const LogInPage: React.FC = () => {
             >
               Вхід
             </Typography>
-            {errorMessage && (
-              <Typography
-                variant="body1"
-                color="error"
-                className="mb-3 text-center"
-              >
-                {errorMessage}
-              </Typography>
-            )}
             <Box sx={{ mb: 0 }}>
               <Typography variant="h6" className="mb-2" fontWeight={600}>
                 Email
               </Typography>
               <Controller
                 name="email"
-                  control={control}
+                control={control}
                 rules={{
                   required: "Email обов'язковий",
                   pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
                 }}
-                        helperText={
-                      errors.email
+                render={({ field }) => (
+                  <CustomInputs
+                    {...field}
+                    placeholder="e-mail"
+                    variant="outlined"
+                    size="small"
+                    error={!!errors.email}
+                    helperText={
+                      errorMessage || errors.email
                         ? typeof errors.email.message === "string"
                           ? errors.email.message
                           : " "
