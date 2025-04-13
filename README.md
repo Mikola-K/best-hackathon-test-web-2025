@@ -104,7 +104,7 @@ API платформи дозволяє взаємодіяти з базою д�
 1. Клонуйте репозиторій на ваш комп’ютер:
 
    
-   git clone https://github.com/your-repository.git
+   git clone https://github.com/Mikola-K/best-hackathon-test-web-2025.git
    cd your-repository
    
 
