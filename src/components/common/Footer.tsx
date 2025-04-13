@@ -1,44 +1,44 @@
 "use client";
 import { Box, Typography, Link } from "@mui/material";
 
-const FooterSection = ({ title, links, items }) => (
+const FooterSection = ({ title, items }) => (
   <Box
     sx={{ flex: 1, marginBottom: { xs: "20px", md: 0 }, textAlign: "center" }}
   >
     <Typography variant="h6" sx={{ fontWeight: 700 }}>
-       {title}
+      {title}
     </Typography>
     {items.map((item, index) => {
       const [text, link] = item.split("|");
       return (
-      <Typography
-        variant="body2"
-        key={index}
-        sx={{ marginTop: "10px" }}
-        fontWeight={700}
-        fontSize={16}
-      >
-        {link ? (
-        <Link href={link} underline="none" color="inherit">
-          {text}
-        </Link>
-        ) : (
-        text
-        )}
-      </Typography>
+        <Typography
+          variant="body2"
+          key={index}
+          sx={{ marginTop: "10px" }}
+          fontWeight={700}
+          fontSize={16}
+        >
+          {link ? (
+            <Link href={link} underline="none" color="inherit">
+              {text}
+            </Link>
+          ) : (
+            text
+          )}
+        </Typography>
       );
     })}
-    </Box>
-  );
+  </Box>
+);
 
-  const Footer = () => {
-    const infoItems = [
+const Footer = () => {
+  const infoItems = [
     "Про нас|/faq",
     "Донат|/donate",
     "Новини|/news",
     "Pet Stories|/petstories",
     "Наша місія|/mission",
-    ];
+  ];
 
   const contactItems = [
     "Телефони:",

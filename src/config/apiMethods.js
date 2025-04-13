@@ -15,9 +15,7 @@ export const authSignIn = async (email, password) => {
 export const authRegister = async (formData) => {
   try {
     const role = formData.shelterName ? "shelter" : "user";
-    const name = formData.shelterName 
-      ? formData.shelterName 
-      : formData.name;
+    const name = formData.shelterName ? formData.shelterName : formData.name;
 
     const userData = await axios.post(`auth/register`, {
       email: formData.email,
@@ -87,12 +85,11 @@ export const postAnimals = async (data) => {
       height: Number(data.height),
       weight: Number(data.weight),
       hasPassport: data.hasPassport === "true",
-      war: data.isWarAnimal ? "Так" : "Ні",
       images: data.images,
       isWarAnimal: data.isWarAnimal === "true",
       isSterilized: data.isSterilized === "true",
       type: 0,
-      healthStatus: data.healthStatus,
+      healthStatus: 0,
       description: data.detailedDescription,
       donationLink: data.donationLink,
       additionDate: new Date().toISOString(),
