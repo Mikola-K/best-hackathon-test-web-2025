@@ -17,6 +17,7 @@ import {
   CustomRadio,
 } from "../common/styles/customStyledComponents/customStyledComponents";
 import { selectUserStore } from "../../store/features/userSlise";
+import { postAnimals } from "../../config/apiMethods";
 
 type FormData = {
   role: string;
@@ -49,8 +50,10 @@ const AnimalForm = () => {
     setValue,
   } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log(data);
+    const animalsData = await postAnimals(data);
+    console.log("response", animalsData);
   };
 
   return (
